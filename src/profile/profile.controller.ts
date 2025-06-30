@@ -36,6 +36,6 @@ export class ProfileController {
     @Delete(':id')
     @ApiOperation({ summary: 'Api endpoint to delete a profile of the user' })
     async DeleteProfile(@Param('id')id:string) {
-        return await this.DeleteProfile(id)
+        return await this.profileService.DeleteProfile(id)
     }
 }

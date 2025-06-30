@@ -1,7 +1,13 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
 
-@Schema()
+
+interface TimestampedDocument {
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+@Schema({timestamps:true})
 export class User {
 
     @Prop({ required: true })
@@ -13,16 +19,14 @@ export class User {
     @Prop({ required: false })
     createdBy?: Types.ObjectId
 
-    @Prop({ required: false })
-    createdOn?: Date
+    // @Prop({ required: false })
+    // createdOn?: Date
 
     //Connected Fields
     @Prop({ type: Types.ObjectId, ref: 'Profile', required: false })
     profile?: Types.ObjectId
-
-}   
-
+}
 const UserSchema = SchemaFactory.createForClass(User)
-type UserDocument = User & Document;
+type UserDocument = User & Document &TimestampedDocument
 
 export { UserSchema, UserDocument }

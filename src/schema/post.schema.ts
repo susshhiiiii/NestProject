@@ -4,11 +4,10 @@ import { Types } from "mongoose";
 @Schema()
 export class Post {
     @Prop({ required: true })
-
     tweet: string
 
-    @Prop({ required: true })
-    createdOn: Date
+    @Prop({required:false})
+    image?: string
 
     //Related Fields
     @Prop({ type: Types.ObjectId, required: true, ref: 'Profile' })

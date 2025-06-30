@@ -8,7 +8,7 @@ export class UserResponse{
     email: string
     
     @ApiPropertyOptional()
-    createdBy?: Types.ObjectId|null
+    createdBy?: Types.ObjectId|null|string
     
     @ApiPropertyOptional()
     createdOn?: Date|null

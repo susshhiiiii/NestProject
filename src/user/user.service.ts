@@ -20,12 +20,12 @@ export class UserService {
     }
 
     async GetAllUser():Promise<UserResponse[]> {
-        const users = await this.userModel.find()
+        const users = await this.userModel.find().populate('profile').exec()
         return (await users).map((i)=>ToUserResponse(i))
     }
 
     async GetUser(id: string): Promise<UserResponse>{
-        const user = await this.userModel.findById(id)
+        const user = await this.userModel.findById(id).exec()
         if (!user)
             throw new BadRequestException('There is no user with the given id')
         return ToUserResponse(user)
@@ -38,7 +38,7 @@ export class UserService {
     }
 
     async Update(updateRequest: UpdateUserDto) {
-        const updatedUser = await this.userModel.findById(updateRequest.id)
+        const updatedUser = await this.userModel.findById(updateRequest.id).exec()
         
         if (updatedUser) {
             updatedUser.email = updateRequest.email
