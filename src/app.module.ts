@@ -6,21 +6,25 @@ import { PostModule } from './modules/post/post.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { AuthModule } from './auth/auth.module';
 import { ActivityModule } from './modules/activity/activity.module';
+import { JwtService } from '@nestjs/jwt';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/guards/auth.guard';
+import { RoleGuard } from './auth/guards/roles.guard';
 
 @Module({
   imports: [MongooseModule.forRoot('mongodb://localhost/social-media'),
             UserModule, ProfileModule, PostModule, CommentModule, AuthModule,ActivityModule],
   controllers: [],
   providers: [
-    // JwtService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass:AuthGuard
-    // },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass:RoleGuard
-    // }
+    JwtService,
+    {
+      provide: APP_GUARD,
+      useClass:AuthGuard
+    },
+    {
+      provide: APP_GUARD,
+      useClass:RoleGuard
+    }
   ],
 })
 export class AppModule {}

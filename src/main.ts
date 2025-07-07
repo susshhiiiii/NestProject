@@ -7,7 +7,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Social Media Nest Api')
     .setDescription('Api for Profile management of Social Media')
-    .addBearerAuth()
+    .addBearerAuth() 
     .setVersion('1.0')
     .build()
 

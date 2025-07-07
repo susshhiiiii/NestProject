@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
-import { ActivityService } from './activity.service';
 import { ApiOperation, ApiTags, ApiResponse } from '@nestjs/swagger';
+import { ActivityService } from './activity.service';
 
 @Controller('activities')
 
@@ -8,10 +8,10 @@ export class ActivityController {
     constructor(private readonly activityService: ActivityService) { }
 
     @Get()
-    @ApiOperation({ summary: 'Get all activity logs' })
+    @ApiOperation({ summary: 'Get all updated activity logs' })
     @ApiResponse({
         status: 200,
-        description: 'List of all user activities',
+        description: 'List of all user updated activities',
 
     })
     async getAllActivities() {

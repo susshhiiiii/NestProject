@@ -1,4 +1,4 @@
-import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, Injectable, PayloadTooLargeException, UnauthorizedException } from '@nestjs/common';
 import { UserService } from 'src/modules/user/user.service';
 import { LoginDto } from './dto/login.dto';
 import { HashCompare } from 'src/helper/hashing.helper';
@@ -23,6 +23,7 @@ export class AuthService {
             roles:user.roles    
         }
 
+        console.log(payload)
         const token = await this.jwtService.signAsync(payload)
         return {accessToken:token}
     }

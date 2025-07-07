@@ -2,9 +2,12 @@ import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/
 import { UserService } from './user.service';
 import { CreateUserDto } from './userDtos/Create.dto';
 import { UpdateUserDto } from './userDtos/Update.dto';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { Public } from 'src/auth/decorators/auth.decorator';
-// @Roles(Role.User)
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/enums/role.enum';
+@Roles(Role.User)
+@ApiBearerAuth()
 @Controller('user')
 export class UserController {
     constructor(private userService: UserService) { }

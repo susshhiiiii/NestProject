@@ -3,22 +3,30 @@
  */
 
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-export type ActitvityDocument = Activity & Document;
+import { Types } from "mongoose";
+export type ActitvityDocument = UpdatedActivitySchema & Document;
 @Schema({ timestamps: true })
-export class Activity {
-
-
+export class UpdatedActivitySchema {
+    
+    @Prop()
+    userID: Types.ObjectId
+    
+    //update
     @Prop()
     action: string;
 
     @Prop()
-    resource: string;
-
-    @Prop()
+    //Updated the data
     description: string;
 
-    @Prop({ type: Object })
-    payload?: any;
+    @Prop()
+    previousData?: [];
+    
+    @Prop()
+    updatedData?: []
+    
+    @Prop()
+    updatedAt?:Date
 
 }
-export const ActivityModel = SchemaFactory.createForClass(Activity);
+export const ActivityModel = SchemaFactory.createForClass(UpdatedActivitySchema);

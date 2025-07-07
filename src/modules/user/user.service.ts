@@ -19,14 +19,13 @@ export class UserService {
         await user.save()
         return ToUserResponse(user)
     }
-
     async GetAllUser():Promise<UserResponse[]> {
         const users = await this.userModel.find().populate('profile').exec()
-        await this.activityService.logActivity
-            ({
-                action: "Create", resource: "Post",
-                description: "Creted a new post",
-            })
+        // await this.activityService.logActivity
+        //     ({
+        //         action: "Update", resource: "Patch",
+        //         description: "Creted a new post",
+        //     })
         return (await users).map((i)=>ToUserResponse(i))
     }
 
@@ -46,14 +45,27 @@ export class UserService {
     async Update(updateRequest: UpdateUserDto) {
         const updatedUser = await this.userModel.findById(updateRequest.id).exec()
         
+
         if (updatedUser) {
             updatedUser.email = updateRequest.email
             updatedUser.password = await HashPassword(updateRequest.password)
             
             const finalUser = await this.userModel.
                 findByIdAndUpdate(updatedUser.id, updatedUser, { new: true }).exec()
-            if(!finalUser)throw new BadRequestException('Couldnot update data')
-            return ToUserResponse(finalUser)
+            if (!finalUser) throw new BadRequestException('Couldnot update data')
+            
+            const diffKeys = Object.keys(updatedUser).filter((key) => key in updateRequest && updateRequest[key] != updatedUser[key])
+            
+            const prevData = {}
+            const newData = {}
+            diffKeys.forEach((key) => {
+                if (key != 'password') {                    
+                    prevData[key] = updatedUser[key]
+                    newData[key]=updateRequest[key]
+                }
+            })
+            this.activityService.logActivity(prevData,newData,finalUser.updatedAt)
+            return ToUserResponse(finalUser)    
         }
         throw new BadRequestException("Couldn't find user with the given id")
     }
