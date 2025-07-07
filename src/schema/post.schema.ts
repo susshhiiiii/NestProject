@@ -1,7 +1,9 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
+import { Timestamp } from "rxjs";
+import { TimestampedDocument } from "src/helper/conversion.helper";
 
-@Schema()
+@Schema({timestamps:true})
 export class Post {
     @Prop({ required: true })
     tweet: string
@@ -16,8 +18,13 @@ export class Post {
     @Prop({ type: Types.ObjectId, required: false, ref: 'Comment' })
     comment?: Types.ObjectId
 
+    @Prop()
+    createdAt?: Date 
+    
+    @Prop()
+    updatedAt?:Date
 }
 
 const PostSchema = SchemaFactory.createForClass(Post)
-type PostDocument = Post & Document
+type PostDocument = Post & Document 
 export { PostDocument, PostSchema }

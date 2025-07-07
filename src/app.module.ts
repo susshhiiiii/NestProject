@@ -1,14 +1,26 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserModule } from './user/user.module';
-import { ProfileModule } from './profile/profile.module';
-import { PostModule } from './post/post.module';
-import { CommentModule } from './comment/comment.module';
+import { UserModule } from './modules/user/user.module';
+import { ProfileModule } from './modules/profile/profile.module';
+import { PostModule } from './modules/post/post.module';
+import { CommentModule } from './modules/comment/comment.module';
+import { AuthModule } from './auth/auth.module';
+import { ActivityModule } from './modules/activity/activity.module';
 
 @Module({
   imports: [MongooseModule.forRoot('mongodb://localhost/social-media'),
-            UserModule, ProfileModule, PostModule, CommentModule],
+            UserModule, ProfileModule, PostModule, CommentModule, AuthModule,ActivityModule],
   controllers: [],
-  providers: [],
+  providers: [
+    // JwtService,
+    // {
+    //   provide: APP_GUARD,
+    //   useClass:AuthGuard
+    // },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass:RoleGuard
+    // }
+  ],
 })
 export class AppModule {}

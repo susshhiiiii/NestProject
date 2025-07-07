@@ -7,20 +7,26 @@ import { HashPassword } from 'src/helper/hashing.helper';
 import { ToUserResponse } from 'src/helper/conversion.helper';
 import { UserResponse } from './userDtos/Response.dto';
 import { UpdateUserDto } from './userDtos/Update.dto';
+import { ActivityService } from '../activity/activity.service';
 
 @Injectable()
 export class UserService {
-    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) { }
+    constructor(@InjectModel(User.name) private userModel: Model<UserDocument>,private activityService:ActivityService) { }
 
     async CreateUser(createRequest: CreateUserDto):Promise<UserResponse> {
         const user = new this.userModel
-            ({ email: createRequest.email, password: await HashPassword(createRequest.password) })
+            ({ email: createRequest.email, password: await HashPassword(createRequest.password),roles:createRequest.roles })
         await user.save()
         return ToUserResponse(user)
     }
 
     async GetAllUser():Promise<UserResponse[]> {
         const users = await this.userModel.find().populate('profile').exec()
+        await this.activityService.logActivity
+            ({
+                action: "Create", resource: "Post",
+                description: "Creted a new post",
+            })
         return (await users).map((i)=>ToUserResponse(i))
     }
 
@@ -50,5 +56,10 @@ export class UserService {
             return ToUserResponse(finalUser)
         }
         throw new BadRequestException("Couldn't find user with the given id")
+    }
+
+    async FindByEmail(email: string){
+        const user =await this.userModel.findOne({ email: email }).exec()
+        return user
     }
 }

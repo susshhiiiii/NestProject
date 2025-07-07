@@ -15,5 +15,12 @@ export class PostResponse {
     profile: Types.ObjectId
     
     @ApiPropertyOptional()
-    comment?: Types.ObjectId|null
+    comment?: Types.ObjectId | null
+    
+    @ApiPropertyOptional()
+    createdOn?: Date | null
+    
+    @ApiPropertyOptional()
+    updatedOn?: Date | null    
+    
 }

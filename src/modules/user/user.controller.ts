@@ -3,11 +3,13 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './userDtos/Create.dto';
 import { UpdateUserDto } from './userDtos/Update.dto';
 import { ApiOperation } from '@nestjs/swagger';
-
+import { Public } from 'src/auth/decorators/auth.decorator';
+// @Roles(Role.User)
 @Controller('user')
 export class UserController {
     constructor(private userService: UserService) { }
-    @Post()
+    @Public()
+    @Post('register')
     @ApiOperation({summary:'Api endpoint to add User'})
     async CreateUser(@Body() userRequest: CreateUserDto) {
         return await this.userService.CreateUser(userRequest)

@@ -5,7 +5,7 @@ import { Profile } from 'src/schema/profile.schema';
 import { ProfileResponse } from './profileDtos/Response.dto';
 import { ToProfileResponse } from 'src/helper/conversion.helper';
 import { CreateProfileDto } from './profileDtos/Create.dto';
-import { UserService } from 'src/user/user.service';
+import { UserService } from 'src/modules/user/user.service';
 import { UpdateProfileDto } from './profileDtos/Update.dto';
 
 @Injectable()

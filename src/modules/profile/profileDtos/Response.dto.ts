@@ -21,6 +21,12 @@ export class ProfileResponse{
     @ApiPropertyOptional()
     post?: Types.ObjectId | null
     
+    @ApiPropertyOptional()
+    createdOn?: Date | null
+    
+    @ApiPropertyOptional()
+    updatedOn?:Date|null
+    
 }
 
    

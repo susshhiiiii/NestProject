@@ -1,6 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger"
-import { isNotEmpty, IsNotEmpty } from "class-validator"
+import { IsNotEmpty } from "class-validator"
 import { Types } from "mongoose"
+import { Role } from "src/enums/role.enum"
 
 export class UpdateUserDto{
     @ApiProperty()
@@ -13,5 +14,9 @@ export class UpdateUserDto{
 
     @ApiProperty()
     @IsNotEmpty()
-    password:string 
+    password: string 
+    
+    @ApiProperty()
+    @IsNotEmpty()
+    roles:Role[]
 }
