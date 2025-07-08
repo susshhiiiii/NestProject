@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Req } from '@nestjs/common';
 import { ProfileService } from './profile.service';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CreateProfileDto } from './profileDtos/Create.dto';
 import { UpdateProfileDto } from './profileDtos/Update.dto';
-import { appendFile } from 'fs';
+import { Request } from 'express';
 
+@ApiBearerAuth()
 @Controller('profile')
 export class ProfileController {
     constructor(private profileService: ProfileService) { }
@@ -23,14 +24,17 @@ export class ProfileController {
 
     @Post()
     @ApiOperation({summary:'Api endpoint to Create a profile for the user'})    
-    async CreateProfile(@Body()createProfileRequest:CreateProfileDto) {
-        return await this.profileService.CreateProfile(createProfileRequest)
+    async CreateProfile(@Body() createProfileRequest: CreateProfileDto, @Req() request: Request) {
+        const userId=request['user'].sub
+
+        return await this.profileService.CreateProfile(createProfileRequest,userId)
     }
 
     @Put()
     @ApiOperation({summary:'Api endpoint to update a profile of the user'})
-    async UpdateProfile(@Body() UpdateProfileDto: UpdateProfileDto) {
-        return await this.profileService.UpdateProfile(UpdateProfileDto)
+    async UpdateProfile(@Body() UpdateProfileDto: UpdateProfileDto, @Req() request: Request) {
+        const userId=request['user'].sub
+        return await this.profileService.UpdateProfile(UpdateProfileDto,userId)
     }
 
     @Delete(':id')

@@ -14,8 +14,6 @@ export class CreateProfileDto{
     @ApiPropertyOptional()        
     bio?: string
 
-    @ApiProperty()
-    @IsNotEmpty()    
-    user: Types.ObjectId
+    
     
 }

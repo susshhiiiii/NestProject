@@ -4,9 +4,9 @@
 
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
-export type ActitvityDocument = UpdatedActivitySchema & Document;
+export type ActitvityDocument = ActivitySchema & Document;
 @Schema({ timestamps: true })
-export class UpdatedActivitySchema {
+export class ActivitySchema {
     
     @Prop()
     userID: Types.ObjectId
@@ -25,8 +25,6 @@ export class UpdatedActivitySchema {
     @Prop()
     updatedData?: []
     
-    @Prop()
-    updatedAt?:Date
-
+   
 }
-export const ActivityModel = SchemaFactory.createForClass(UpdatedActivitySchema);
+export const ActivityModel = SchemaFactory.createForClass(ActivitySchema);

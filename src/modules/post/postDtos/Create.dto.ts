@@ -12,6 +12,6 @@ export class CreatePostDto{
     @IsNotEmpty()
     profile: Types.ObjectId
     
-    @ApiPropertyOptional()
-    comment?:Types.ObjectId
+    // @ApiPropertyOptional()
+    // comment?:Types.ObjectId
 }

@@ -2,7 +2,7 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { IsNotEmpty } from "class-validator";
 import { Types } from "mongoose";
 
-export class UpdateActivityResponseDto {
+export class ActivityResponseDto {
     
     @ApiProperty()
     userID: Types.ObjectId

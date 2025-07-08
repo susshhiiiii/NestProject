@@ -10,10 +10,11 @@ import { JwtService } from '@nestjs/jwt';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { RoleGuard } from './auth/guards/roles.guard';
+import { LoginModule } from './modules/login-logmodule/login-logmodule.module';
 
 @Module({
   imports: [MongooseModule.forRoot('mongodb://localhost/social-media'),
-            UserModule, ProfileModule, PostModule, CommentModule, AuthModule,ActivityModule],
+            UserModule, ProfileModule, PostModule, CommentModule, AuthModule,ActivityModule,LoginModule],
   controllers: [],
   providers: [
     JwtService,

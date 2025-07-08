@@ -14,8 +14,8 @@ export class PostResponse {
     @IsNotEmpty()
     profile: Types.ObjectId
     
-    @ApiPropertyOptional()
-    comment?: Types.ObjectId | null
+    // @ApiPropertyOptional()
+    // comment?: Types.ObjectId[] | null
     
     @ApiPropertyOptional()
     createdOn?: Date | null

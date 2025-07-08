@@ -18,8 +18,5 @@ export class UpdateProfileDto{
     @ApiPropertyOptional()        
     bio?: string
 
-    @ApiProperty()
-    @IsNotEmpty()    
-    user: Types.ObjectId
     
 }

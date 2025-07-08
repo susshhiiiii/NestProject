@@ -1,12 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import {  Body, Controller, Delete, Get, Param, Patch, Post, Put, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './userDtos/Create.dto';
 import { UpdateUserDto } from './userDtos/Update.dto';
 import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { Public } from 'src/auth/decorators/auth.decorator';
-import { Roles } from 'src/auth/decorators/roles.decorator';
-import { Role } from 'src/enums/role.enum';
-@Roles(Role.User)
+import { Request } from 'express';
+// @Roles(Role.User)
 @ApiBearerAuth()
 @Controller('user')
 export class UserController {
@@ -38,8 +37,9 @@ export class UserController {
 
     @Put()
     @ApiOperation({summary:'Api endpoint to update User'})
-    UpdateUser(@Body() updateRequest:UpdateUserDto ) {
-        return this.userService.Update(updateRequest)
+    UpdateUser(@Body() updateRequest: UpdateUserDto, @Req() req: Request) {
+        const userId=req['user'].sub
+        return this.userService.Update(updateRequest,userId)
     }
 
 }

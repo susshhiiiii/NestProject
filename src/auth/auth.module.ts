@@ -4,13 +4,14 @@ import { AuthService } from './auth.service';
 import { UserModule } from 'src/modules/user/user.module';
 import { JwtModule } from '@nestjs/jwt';
 import { JWT_KEY } from './guards/auth.guard';
+import { LoginModule } from 'src/modules/login-logmodule/login-logmodule.module';
 
 @Module({
   imports: [UserModule, JwtModule.register({
     global: true,
     secret: JWT_KEY,
     signOptions:{expiresIn:'1h'}
-  })],
+  }),LoginModule],
   controllers: [AuthController],
   providers: [AuthService],
   exports:[AuthService]

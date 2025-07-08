@@ -18,6 +18,6 @@ export class UpdatePostDto{
     @ApiPropertyOptional()
     image?: string
 
-    @ApiPropertyOptional()
-    comment?:Types.ObjectId
+    // @ApiPropertyOptional()
+    // comment?:Types.ObjectId
 }

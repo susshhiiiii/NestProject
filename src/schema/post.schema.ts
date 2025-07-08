@@ -16,7 +16,7 @@ export class Post {
     profile: Types.ObjectId
 
     @Prop({ type: Types.ObjectId, required: false, ref: 'Comment' })
-    comment?: Types.ObjectId
+    comment?: Types.ObjectId[]
 
     @Prop()
     createdAt?: Date 

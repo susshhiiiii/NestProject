@@ -18,7 +18,7 @@ export class Profile {
         user: Types.ObjectId
 
         @Prop({ type: Types.ObjectId, ref: 'Post', require: false })
-        post?: Types.ObjectId   
+        post?: Types.ObjectId[]  
 
         @Prop()
         createdAt?: Date

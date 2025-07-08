@@ -33,7 +33,7 @@ function ToPostResponse(postData: Post): PostResponse{
         tweet: postData.tweet,
         image: postData.image??null,
         profile: postData.profile,
-        comment: postData.comment ?? null,
+        // comment: postData.comment ?? null,
         createdOn: postData.createdAt,
         updatedOn:postData.updatedAt
     }

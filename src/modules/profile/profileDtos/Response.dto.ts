@@ -19,7 +19,7 @@ export class ProfileResponse{
     user: Types.ObjectId
     
     @ApiPropertyOptional()
-    post?: Types.ObjectId | null
+    post?: Types.ObjectId[] | null
     
     @ApiPropertyOptional()
     createdOn?: Date | null
