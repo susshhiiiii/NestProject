@@ -10,6 +10,7 @@ import { Request } from 'express';
 export class ProfileController {
     constructor(private profileService: ProfileService) { }
     
+    //Admin
     @Get()
     @ApiOperation({ summary: 'Api endpoint to get All Profiles' })
     async GetAllProfiles() {
@@ -18,15 +19,15 @@ export class ProfileController {
 
     @Get(':id')
     @ApiOperation({ summary: 'Api endpoint to get Profile with the provided id' })
-    async GetProfile(@Param('id')id:string) {
-        return await this.profileService.GetProfile(id)
+    async GetProfile(@Param('id') id: string, @Req() req: Request) {
+        const userId=req['user'].sub
+        return await this.profileService.GetProfile(id,userId)
     }
 
     @Post()
     @ApiOperation({summary:'Api endpoint to Create a profile for the user'})    
     async CreateProfile(@Body() createProfileRequest: CreateProfileDto, @Req() request: Request) {
         const userId=request['user'].sub
-
         return await this.profileService.CreateProfile(createProfileRequest,userId)
     }
 
@@ -39,7 +40,8 @@ export class ProfileController {
 
     @Delete(':id')
     @ApiOperation({ summary: 'Api endpoint to delete a profile of the user' })
-    async DeleteProfile(@Param('id')id:string) {
-        return await this.profileService.DeleteProfile(id)
+    async DeleteProfile(@Param('id') id: string, @Req() req: Request) {
+        const userId=req['user'].sub
+        return await this.profileService.DeleteProfile(id,userId)
     }
 }

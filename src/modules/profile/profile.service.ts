@@ -1,4 +1,4 @@
-import { BadRequestException, HttpException, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Profile } from 'src/schema/profile.schema';
@@ -8,7 +8,6 @@ import { CreateProfileDto } from './profileDtos/Create.dto';
 import { UserService } from 'src/modules/user/user.service';
 import { UpdateProfileDto } from './profileDtos/Update.dto';
 import { User } from 'src/schema/user.schema';
-import { create } from 'domain';
 
 @Injectable()
 export class ProfileService {
@@ -16,22 +15,34 @@ export class ProfileService {
         @InjectModel(User.name)private userModel:Model<User>,
         private userService: UserService
     ) { }
+
+
     async GetProfiles():Promise<ProfileResponse[]> {
         const response = await this.profileModel.find().populate('user').exec()
         return response.map((i)=>ToProfileResponse(i))
     }
 
-    async GetProfile(id:string): Promise<ProfileResponse>{
-        const response = await this.profileModel.findById(id).populate('user').exec()
-
+    async GetProfile(id:string,userId:Types.ObjectId): Promise<ProfileResponse>{
+        const response = await this.profileModel.findById(id)
+        
         if(!response)throw new BadRequestException('No id present')
-        return ToProfileResponse(response);    
+        if(response.user && response.user!=userId)
+            return ToProfileResponse(response);
+        
+        throw new UnauthorizedException('Cannot access this Profile')
     }
 
-    async DeleteProfile(id: string): Promise<string>{
-        const response = await this.profileModel.findByIdAndDelete(id).exec()
+    async DeleteProfile(id: string,userId:Types.ObjectId): Promise<string>{
+        const response = await this.profileModel.findById(id)        
         if (!response) throw new BadRequestException('No Profile with the given id is present')
-        return 'Profile is Deleted'
+        
+        if (response && response.user == userId) {
+            if (await this.userModel.findByIdAndDelete(id)) {
+                return 'Profile is Deleted'                
+            }
+            
+        }
+        throw new UnauthorizedException('Cannot delete this profile')
     }
 
     async CreateProfile(createRequest: CreateProfileDto,userId:Types.ObjectId): Promise<ProfileResponse>{

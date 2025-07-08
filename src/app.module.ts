@@ -11,10 +11,16 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { RoleGuard } from './auth/guards/roles.guard';
 import { LoginModule } from './modules/login-logmodule/login-logmodule.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://localhost/social-media'),
-            UserModule, ProfileModule, PostModule, CommentModule, AuthModule,ActivityModule,LoginModule],
+  imports: [
+     ConfigModule.forRoot({
+      isGlobal:true
+    }),
+    MongooseModule.forRoot('mongodb://localhost/social-media'),   
+    UserModule, ProfileModule, PostModule, CommentModule, AuthModule, ActivityModule, LoginModule
+  ],
   controllers: [],
   providers: [
     JwtService,
