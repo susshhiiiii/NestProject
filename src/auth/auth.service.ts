@@ -116,11 +116,18 @@ export class AuthService {
                 email: user.email,
                 roles: user.roles
             }        
+             user.otp = undefined
+            user.otpGenerateTime = undefined
+            await user.save()
             const token = await this.jwtService.signAsync(payload)
             return {accessToken:token}
         }
 
-        return "Otp Doesnot match"
+        user.otp = undefined
+        user.otpGenerateTime = undefined
+        await user.save()
+
+        return "Otp Doesnot match or expired"
     }
 
 }
