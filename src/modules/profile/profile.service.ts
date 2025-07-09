@@ -23,10 +23,10 @@ export class ProfileService {
     }
 
     async GetProfile(id:string,userId:Types.ObjectId): Promise<ProfileResponse>{
-        const response = await this.profileModel.findById(id)
+        const response = await this.profileModel.findById(id).populate('user').exec()
         
         if(!response)throw new BadRequestException('No id present')
-        if(response.user && response.user!=userId)
+        if(response.user && response.user==userId)
             return ToProfileResponse(response);
         
         throw new UnauthorizedException('Cannot access this Profile')

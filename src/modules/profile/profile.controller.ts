@@ -4,6 +4,8 @@ import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { CreateProfileDto } from './profileDtos/Create.dto';
 import { UpdateProfileDto } from './profileDtos/Update.dto';
 import { Request } from 'express';
+import { Role } from 'src/enums/role.enum';
+import { Roles } from 'src/auth/decorators/roles.decorator';
 
 @ApiBearerAuth()
 @Controller('profile')
@@ -11,6 +13,7 @@ export class ProfileController {
     constructor(private profileService: ProfileService) { }
     
     //Admin
+    @Roles(Role.Admin)
     @Get()
     @ApiOperation({ summary: 'Api endpoint to get All Profiles' })
     async GetAllProfiles() {
@@ -20,7 +23,10 @@ export class ProfileController {
     @Get(':id')
     @ApiOperation({ summary: 'Api endpoint to get Profile with the provided id' })
     async GetProfile(@Param('id') id: string, @Req() req: Request) {
-        const userId=req['user'].sub
+        const userId = req['user'].sub
+        // console.log(req['user'])
+        // const isUser = req['user'].roles.some((u) => u == Role.Admin)
+        // console.log(isUser)
         return await this.profileService.GetProfile(id,userId)
     }
 

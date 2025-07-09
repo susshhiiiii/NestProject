@@ -1,28 +1,38 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as basicAuth from 'express-basic-auth'
+import * as basicAuth from 'express-basic-auth';
+import * as dotenv from 'dotenv';
+import { ErrorLogFilter } from './error-log/error-log.filter';
+import { ErrorLogService } from './error-log/error-log.service';
+
+dotenv.config();
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-   app.use(
-    ['/api', '/api-json'], 
+
+  const errorLogsService = app.get(ErrorLogService);
+  app.useGlobalFilters(new ErrorLogFilter(errorLogsService));
+  app.use(
+    ['/api', '/api-json'],
     basicAuth({
       challenge: true,
       users: {
-        'admin': 'swaggerPass123',
+        [process.env.SWAGGER_USER as string]: process.env.SWAGGER_PASS as string,
       },
     }),
   );
+
   const config = new DocumentBuilder()
     .setTitle('Social Media Nest Api')
     .setDescription('Api for Profile management of Social Media')
-    .addBearerAuth() 
+    .addBearerAuth()
     .setVersion('1.0')
-    .build()
+    .build();
 
-  const documentFactory = () => SwaggerModule.createDocument(app, config)
-  SwaggerModule.setup('api', app, documentFactory)
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
-

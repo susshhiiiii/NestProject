@@ -12,14 +12,17 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { RoleGuard } from './auth/guards/roles.guard';
 import { LoginModule } from './modules/login-logmodule/login-logmodule.module';
 import { ConfigModule } from '@nestjs/config';
+import { ErrorLog } from './error-log/entities/error-log.schema';
+import { ErrorLogModule } from './error-log/error-log.module';
 
 @Module({
   imports: [
      ConfigModule.forRoot({
-      isGlobal:true
+      isGlobal: true, // So you don't have to import it everywhere
     }),
     MongooseModule.forRoot('mongodb://localhost/social-media'),   
-    UserModule, ProfileModule, PostModule, CommentModule, AuthModule, ActivityModule, LoginModule
+    UserModule, ProfileModule, PostModule, CommentModule, AuthModule, ActivityModule, LoginModule,
+    ErrorLogModule
   ],
   controllers: [],
   providers: [

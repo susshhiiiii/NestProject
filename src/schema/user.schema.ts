@@ -1,12 +1,8 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Types } from "mongoose";
 import { Role } from "src/enums/role.enum";
-import { TimestampedDocument } from "src/helper/conversion.helper";
 
-
-
-
-@Schema({timestamps:true})
+@Schema({ timestamps: true })
 export class User {
 
   @Prop({ required: true })  
@@ -14,6 +10,15 @@ export class User {
 
   @Prop({ required: true })
   password: string
+
+  @Prop({default:false})
+  isVerified:boolean
+
+  @Prop({ required: false })
+  otp?: string
+  
+  @Prop({ required: false })
+  otpGenerateTime?:Date
 
   @Prop({ required: false })  
   createdBy?: Types.ObjectId
@@ -29,7 +34,8 @@ export class User {
   createdAt?: Date 
   
   @Prop()
-  updatedAt?:Date
+  updatedAt?: Date    
+
 }
 const UserSchema = SchemaFactory.createForClass(User)
 type UserDocument = User & Document 
