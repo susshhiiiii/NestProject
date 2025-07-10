@@ -11,7 +11,7 @@ export function VerifyPassword(user:User,otp?:string) {
         return false
 
     if (user.otpGenerateTime) {
-        if ((new Date().getTime() - new Date(user.otpGenerateTime).getTime()) <= 60 * 1000) {
+        if ((new Date().getTime() - new Date(user.otpGenerateTime).getTime()) <= 90 * 1000) {
             return true
         }
     }

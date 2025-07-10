@@ -12,8 +12,9 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { RoleGuard } from './auth/guards/roles.guard';
 import { LoginModule } from './modules/login-logmodule/login-logmodule.module';
 import { ConfigModule } from '@nestjs/config';
-import { ErrorLog } from './error-log/entities/error-log.schema';
 import { ErrorLogModule } from './error-log/error-log.module';
+import { EmailService } from './email/email.service';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { ErrorLogModule } from './error-log/error-log.module';
     }),
     MongooseModule.forRoot('mongodb://localhost/social-media'),   
     UserModule, ProfileModule, PostModule, CommentModule, AuthModule, ActivityModule, LoginModule,
-    ErrorLogModule
+    ErrorLogModule,
+    EmailModule
   ],
   controllers: [],
   providers: [
@@ -34,7 +36,8 @@ import { ErrorLogModule } from './error-log/error-log.module';
     {
       provide: APP_GUARD,
       useClass:RoleGuard
-    }
+    },
+    EmailService
   ],
 })
 export class AppModule {}

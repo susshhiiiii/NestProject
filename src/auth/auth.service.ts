@@ -9,12 +9,15 @@ import { GenerateOtp, VerifyPassword } from 'src/helper/functions.helpers';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from 'src/schema/user.schema';
 import { Model } from 'mongoose';
+import { EmailService } from 'src/email/email.service';
+import { EmailDto } from 'src/email/dto/email.dto';
 
 
 @Injectable()
 export class AuthService {
     constructor(private userService: UserService, private jwtService: JwtService, private loginLogService: LoginLogService
-        ,@InjectModel(User.name)private userModel:Model<User>
+        , @InjectModel(User.name) private userModel: Model<User>,
+        private emailService:EmailService
     ) { }
     
 // async validateUser(dto: LoginDto, req: Request): Promise<any> {
@@ -99,6 +102,11 @@ export class AuthService {
         await this.userModel.updateOne({ _id: user._id }, { $set: { otp: otp, otpGenerateTime: Date.now() } }).exec()
         const temp = await this.userModel.findById(user._id)
         console.log(temp)
+        const emailOptions:EmailDto = {
+            recipients: ['susshhiiiii@gmail.com','sushant2k28@gmail.com'],
+            subject: 'OTP For Social Media login',                     
+        }
+        await this.emailService.sendEmail(emailOptions,parseInt(otp))
         return "Your One-Time Password is and is send to your device"
     }
 
