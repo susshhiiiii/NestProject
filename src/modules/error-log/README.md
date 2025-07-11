@@ -26,4 +26,4 @@ import { ErrorLog } from './error-log/entities/error-log.schema';
 import { ErrorLogService } from './error-log/error-log.service';
 import { ErrorLogFilter } from './error-log/error-log.filter';
 const errorLogsService = app.get(ErrorLogService);
-app.useGlobalFilters(new ErrorLogFilter(errorLogsService));
+app.useGlobalFilters(new ErrorLogFilter(errorLogsService)); 

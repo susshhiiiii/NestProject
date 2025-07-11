@@ -11,6 +11,7 @@ import { User } from 'src/schema/user.schema';
 import { Model } from 'mongoose';
 import { EmailService } from 'src/email/email.service';
 import { EmailDto } from 'src/email/dto/email.dto';
+import { VerifyMailDto } from './dto/verifymail.dto';
 
 
 @Injectable()
@@ -71,10 +72,12 @@ export class AuthService {
     // }
 
     async login(loginDto:LoginDto) {
-        const user =await this.userService.FindByEmail(loginDto.email)
+        const user = await this.userService.FindByEmail(loginDto.email)
+        
         if (!user)
             throw new UnauthorizedException;
-        const validateUser=await HashCompare(loginDto.password,user.password)
+        
+        const validateUser = await HashCompare(loginDto.password, user.password)
         
         if (!validateUser)
             throw new UnauthorizedException
@@ -83,9 +86,11 @@ export class AuthService {
             sub: user._id,
             email: user.email,
             roles: user.roles
-        }   
+        }
+        
         user.otp = undefined
         user.otpGenerateTime = undefined
+        
         await user.save()
         const token = await this.jwtService.signAsync(payload)
         return {accessToken:token}
@@ -99,24 +104,30 @@ export class AuthService {
         
         const otp = GenerateOtp()
         
-        await this.userModel.updateOne({ _id: user._id }, { $set: { otp: otp, otpGenerateTime: Date.now() } }).exec()
+        await this.userModel.updateOne({ _id: user._id },
+            { $set: { otp: otp, otpGenerateTime: Date.now() } }).exec()
+        
         const temp = await this.userModel.findById(user._id)
-        console.log(temp)
+        
         const emailOptions:EmailDto = {
             recipients: ['susshhiiiii@gmail.com','sushant2k28@gmail.com'],
             subject: 'OTP For Social Media login',                     
         }
+
         await this.emailService.sendEmail(emailOptions,parseInt(otp))
+        
         return "Your One-Time Password is and is send to your device"
     }
 
 
     async otpVerify(loginViaOtp:LoginViaOtpDto) {
-        const user =await this.userService.FindByEmail(loginViaOtp.email)
+        const user = await this.userService.FindByEmail(loginViaOtp.email)
+        
         if (!user)
             throw new HttpException('No email present', 404);
 
         const verifyPassword = VerifyPassword(user, loginViaOtp.otp)
+        
         if (verifyPassword) {
             const payload =
             {
@@ -136,6 +147,25 @@ export class AuthService {
         await user.save()
 
         return "Otp Doesnot match or expired"
+    }
+
+    async verifymail(email:string) {
+        const user = await this.userService.FindByEmail(email)
+        
+        if (!user)
+            throw new HttpException("No email present", 404)
+
+        const otp = GenerateOtp()
+        
+        await this.userModel.updateOne({ _id: user._id }, { $set: { otp: otp, otpGenerateTime: Date.now() } }).exec()
+        const temp = await this.userModel.findById(user._id)
+
+        const emailOptions:EmailDto = {
+            recipients: ['susshhiiiii@gmail.com','sushant2k28@gmail.com'],
+            subject: 'OTP For verifying your Email in Social Media',                     
+        }
+        await this.emailService.sendEmail(emailOptions,parseInt(otp))
+        return "Your One-Time Password is and is send to your device"
     }
 
 }

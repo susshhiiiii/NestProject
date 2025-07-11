@@ -25,11 +25,13 @@ export class ErrorLogService {
      * Function for getting all the Error Log through a route
      */
     async GetErroLog(dateRequest:DateRequest): Promise<ErrorDto[]>{
+        
         const logs = await this.errorLogModel.find({
             $and: [{ createdAt: { $gte: dateRequest.startDate } },
             { $lte: dateRequest.endDate }]
         })
-        return logs.map((log)=>ToLogResponse(log))
+        
+        return logs.map((log) => ToLogResponse(log))
     }
 
     

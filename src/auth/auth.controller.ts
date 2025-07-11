@@ -6,7 +6,7 @@ import { Request } from 'express';
 import { ApiOperation } from '@nestjs/swagger';
 import { LoginViaOtpDto } from './dto/loginOtp.dto';
 import { OtpRequestDto } from './dto/otpRequest.dto';
-import { VerifyMail } from './dto/verifymail.dto';
+import { VerifyMailDto } from './dto/verifymail.dto';
 
 @Public()
 @Controller('auth')
@@ -35,7 +35,7 @@ export class AuthController {
     @Public()
     @ApiOperation({ summary: 'Api endpoint to verify your email' })
     @Post('verify-mail/requestOtp')
-    async verifyMailRequest(request: VerifyMail) {
+    async verifyMailRequest(request: VerifyMailDto) {
         // return 
     }
 }

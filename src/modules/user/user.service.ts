@@ -14,31 +14,33 @@ export class UserService {
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>,private activityService:ActivityService) { }
 
     async CreateUser(createRequest: CreateUserDto):Promise<UserResponse> {
+        
         const user = new this.userModel
             ({ email: createRequest.email, password: await HashPassword(createRequest.password),roles:createRequest.roles })
+        
         await user.save()
         return ToUserResponse(user)
     }
     async GetAllUser():Promise<UserResponse[]> {
         const users = await this.userModel.find().populate('profile').exec()
-        // await this.activityService.logActivity
-        //     ({
-        //         action: "Update", resource: "Patch",
-        //         description: "Creted a new post",
-        //     })
+        
         return (await users).map((i)=>ToUserResponse(i))
     }
 
     async GetUser(id: string): Promise<UserResponse>{
         const user = await this.userModel.findById(id).populate('profile').exec()
+        
         if (!user)
             throw new BadRequestException('There is no user with the given id')
+        
         return ToUserResponse(user)
     }
 
     async DeleteUser(id: string): Promise<string>{
-        const user=await this.userModel.findByIdAndDelete(id).exec();
+        
+        const user = await this.userModel.findByIdAndDelete(id).exec();
         if(!user)throw new BadRequestException('No user with the given id is present')
+        
         return 'User is deleted'
     }
 
@@ -57,19 +59,24 @@ export class UserService {
 
                 return oldValue!=newValue
             })
+            
             const prevData = {}
             const newData = {}
+            
             diffKeys.forEach((key) => {
                 if (key != 'password') {                    
                     prevData[key] = updatedUser[key]
                     newData[key]=updateRequest[key]
                 }
             })
+
             updatedUser.email = updateRequest.email
             updatedUser.password = await HashPassword(updateRequest.password)
             updatedUser.roles = updateRequest.roles
+            
             const finalUser = await this.userModel.
                 findByIdAndUpdate(updatedUser.id, updatedUser, { new: true }).exec()
+            
             if (!finalUser) throw new BadRequestException('Couldnot update data')
             
             this.activityService.logActivity(userId,prevData,newData)
@@ -79,7 +86,7 @@ export class UserService {
     }
 
     async FindByEmail(email: string){
-        const user =await this.userModel.findOne({ email: email }).exec()
+        const user = await this.userModel.findOne({ email: email }).exec()
         return user
     }
 

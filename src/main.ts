@@ -3,8 +3,8 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as basicAuth from 'express-basic-auth';
 import * as dotenv from 'dotenv';
-import { ErrorLogFilter } from './error-log/error-log.filter';
-import { ErrorLogService } from './error-log/error-log.service';
+import { ErrorLogFilter } from './modules/error-log/error-log.filter';
+import { ErrorLogService } from './modules/error-log/error-log.service';
 
 dotenv.config();
 

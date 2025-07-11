@@ -33,7 +33,9 @@ export class ProfileService {
     }
 
     async DeleteProfile(id: string,userId:Types.ObjectId): Promise<string>{
+        
         const response = await this.profileModel.findById(id)        
+        
         if (!response) throw new BadRequestException('No Profile with the given id is present')
         
         if (response && response.user == userId) {
@@ -42,11 +44,14 @@ export class ProfileService {
             }
             
         }
+        
         throw new UnauthorizedException('Cannot delete this profile')
     }
 
     async CreateProfile(createRequest: CreateProfileDto,userId:Types.ObjectId): Promise<ProfileResponse>{
+        
         const user = await this.userService.GetUser(userId.toString())
+        
         if (!user) throw new BadRequestException('No user is associated with this id')
         
         const profile = new this.profileModel({...createRequest,user:userId})
@@ -64,13 +69,16 @@ export class ProfileService {
     }
 
     async UpdateProfile(updateRequest: UpdateProfileDto,userId:Types.ObjectId): Promise<ProfileResponse>{
+        
         const user = await this.userService.GetUser(userId.toString())
+        
         if (!user) throw new BadRequestException('No user is associated with this id') 
         
         const profile = await this.profileModel.
             findByIdAndUpdate(updateRequest.id, {...updateRequest,user:userId}, { new: true }).populate('user').exec()
 
         if(!profile)throw new BadRequestException('Couldnot Update the selected profile')
+        
         return ToProfileResponse(profile)
     }
 }

@@ -8,6 +8,10 @@ export class UserResponse{
     @IsNotEmpty()
     email: string
     
+    @ApiProperty()
+    @IsNotEmpty()
+    isVerfied:boolean
+
     @ApiPropertyOptional()
     createdBy?: Types.ObjectId|null|string
     

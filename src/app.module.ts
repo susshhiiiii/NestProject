@@ -12,7 +12,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { RoleGuard } from './auth/guards/roles.guard';
 import { LoginModule } from './modules/login-logmodule/login-logmodule.module';
 import { ConfigModule } from '@nestjs/config';
-import { ErrorLogModule } from './error-log/error-log.module';
+import { ErrorLogModule } from './modules/error-log/error-log.module';
 import { EmailService } from './email/email.service';
 import { EmailModule } from './email/email.module';
 

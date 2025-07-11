@@ -19,7 +19,7 @@ export class ErrorLogFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const request = ctx.getRequest<Request>();
     const response = ctx.getResponse<Response>();
-
+    
     const status =
       exception instanceof HttpException ? exception.getStatus() : 500;
 
@@ -27,10 +27,7 @@ export class ErrorLogFilter implements ExceptionFilter {
       exception instanceof HttpException
         ? exception.getResponse()
             : exception?.message || 'Unknown error';
-      
-    console.log(request, 'request')
-    console.log(exception,'exception')
-    
+
      if(status!=404){ await this.errorLogsService.CreateLog({
         statusCode: status,
         message: typeof message === 'string' ? message : JSON.stringify(message),
